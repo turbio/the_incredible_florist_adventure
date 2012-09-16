@@ -1,12 +1,15 @@
 #pragma once
-#include <SFML\Window.hpp>
-#include <string>
+#include <SFML\Graphics.hpp>	//uses graphics cuz itz a game dur
 
 class LogicHandler{
 
 public:
-	LogicHandler(void);
-	~LogicHandler(void);
-	void keyEvent(sf::Event keyboard_event);
-	void update(void);
+	LogicHandler(void);	//CONSTRUCTOR
+	~LogicHandler(void);	//DESTRUCTOR
+	void update(void);	//update game stuff
+	void run(void);	//main game loop
+
+private:
+	void handleEvent(sf::Event theEventToBeHandled);	//handles any and all events
+	sf::RenderWindow *window;	//the main window (probobaly the only)
 };
