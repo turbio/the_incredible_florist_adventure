@@ -1,0 +1,8 @@
+SFML-2.0/
+*.sdf
+*.sln
+*.vcxproj
+*.filters
+*.user
+*.opensdf
+*.suo
