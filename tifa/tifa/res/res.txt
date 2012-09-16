@@ -2,3 +2,4 @@ death.png
 title.png
 clouds.png
 green_grass.png
+plr_head_happy.png

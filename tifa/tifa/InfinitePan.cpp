@@ -25,13 +25,13 @@ sf::Sprite* InfinitePan::setSprite(sf::Sprite *spr, float with, float ve, float 
 }
 
 void InfinitePan::update(double delta){
-	sprite->move(vel * delta, yPos);
-	sprite1->move(vel * delta, yPos);
+	sprite->move(vel * delta, 0);
+	sprite1->move(vel * delta, 0);
 
-	if(sprite->getPosition().x < -width){
+	if(sprite->getPosition().x < -width + 5){
 		sprite->setPosition(width, yPos);
 	}
-	if(sprite1->getPosition().x < -width){
+	if(sprite1->getPosition().x < -width + 5){
 		sprite1->setPosition(width, yPos);
 	}
 

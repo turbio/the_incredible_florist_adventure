@@ -1,11 +1,10 @@
 #include "LogicHandler.h"
-#include "InfinitePan.h"
 
 #define WIDTH 640
 #define HEIGHT 480
 #define TITLE "The Incredible Florist Adventure"
 
-sf::Sprite titleScreenBg;
+sf::Sprite titleScreenBg, yamster;
 sf::RectangleShape shape;
 
 InfinitePan clouds, ground;
@@ -13,6 +12,7 @@ InfinitePan clouds, ground;
 //CONSTRUCTOR
 LogicHandler::LogicHandler(void){
 	titleScreen = true;
+	elapsedTime = 1;
 
 	window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), TITLE, sf::Style::Close);
 
@@ -29,9 +29,20 @@ LogicHandler::LogicHandler(void){
 	sf::Sprite *cloudSprite = new sf::Sprite();
 	cloudSprite->setTexture(*textureList.at(2));
 	spriteList.push_back(cloudSprite);
-	spriteList.push_back(clouds.setSprite(cloudSprite, WIDTH, -0.001f, 0.0f));
+	spriteList.push_back(clouds.setSprite(cloudSprite, WIDTH, -0.0001f, 0.0f));
 
+	sf::Sprite *groundSprite = new sf::Sprite();
+	groundSprite->setTexture(*textureList.at(3));
+	spriteList.push_back(groundSprite);
+	spriteList.push_back(ground.setSprite(groundSprite, WIDTH, -0.001f, 350.0f));
 
+	yamster.setTexture(*textureList.at(4));
+	spriteList.push_back(&yamster);
+	yamster.scale(0.25, 0.25);
+	yamster.setOrigin(167, 340);
+	yamster.setPosition(50, 300);
+
+	window->setFramerateLimit(0);
 }
 
 //DESTRUCTOR
@@ -41,7 +52,7 @@ LogicHandler::~LogicHandler(void){
 
 void LogicHandler::run(void){
 
-	float deltaTime = 0;
+	double deltaTime = 0;
 	sf::Clock clock;
 	while (window->isOpen()){
 		sf::Event event;
@@ -65,17 +76,19 @@ void LogicHandler::run(void){
 
 		window->draw(shape);
 		shape.move(1, 0);
-
-		deltaTime = clock.getElapsedTime().asMicroseconds();
+		
+		deltaTime = (double)clock.getElapsedTime().asMicroseconds();
 
 		window->display();
     }
 }
 
-void LogicHandler::update(float delta){
-	
+void LogicHandler::update(double delta){
+	elapsedTime += (delta * 0.0001);
 	if(!titleScreen){
 		clouds.update(delta);
+		ground.update(delta);
+		yamster.setRotation(sin(elapsedTime * 0.15) * 10);
 	}
 }
 

@@ -1,16 +1,19 @@
 #pragma once
+
+#include "InfinitePan.h"
 #include <SFML\Graphics.hpp>	//uses graphics cuz itz a game dur
 #include <fstream>
 #include <string>
 #include <vector>
 #include <iostream>
+#include <Windows.h>
 
 class LogicHandler{
 
 public:
 	LogicHandler(void);	//CONSTRUCTOR
 	~LogicHandler(void);	//DESTRUCTOR
-	void update(float delta_time);	//update game stuff
+	void update(double delta_time);	//update game stuff
 	void run(void);	//main game loop
 
 private:
@@ -20,4 +23,5 @@ private:
 	std::vector<sf::Texture*> textureList;	//list of all textures currently loaded
 	std::vector<sf::Sprite*> spriteList;	//list of all active sprites
 	bool titleScreen;	//if the game is at the title screen
+	double elapsedTime;
 };
