@@ -1,12 +1,14 @@
 #include "LogicHandler.h"
+#include "InfinitePan.h"
 
 #define WIDTH 640
 #define HEIGHT 480
 #define TITLE "The Incredible Florist Adventure"
 
-
-sf::Sprite titleScreenBg, cloud1, cloud2;
+sf::Sprite titleScreenBg;
 sf::RectangleShape shape;
+
+InfinitePan clouds, ground;
 
 //CONSTRUCTOR
 LogicHandler::LogicHandler(void){
@@ -24,8 +26,12 @@ LogicHandler::LogicHandler(void){
 	titleScreenBg.setTexture(*textureList.at(1));
 	titleScreenBg.setPosition(0, 0);
 
-	cloud1.setTexture(*textureList.at(2));
-	cloud2.setTexture(*textureList.at(2));
+	sf::Sprite *cloudSprite = new sf::Sprite();
+	cloudSprite->setTexture(*textureList.at(2));
+	spriteList.push_back(cloudSprite);
+	spriteList.push_back(clouds.setSprite(cloudSprite, WIDTH, -0.001f, 0.0f));
+
+
 }
 
 //DESTRUCTOR
@@ -52,23 +58,24 @@ void LogicHandler::run(void){
 		if(titleScreen){
 			window->draw(titleScreenBg);
 		}else{
-			window->draw(cloud1);
-			window->draw(cloud2);
+			for(int i = 0; i < spriteList.size(); i++){
+				window->draw(*spriteList.at(i));
+			}
 		}
 
 		window->draw(shape);
 		shape.move(1, 0);
 
-		deltaTime = clock.getElapsedTime().asMilliseconds();
+		deltaTime = clock.getElapsedTime().asMicroseconds();
 
 		window->display();
     }
 }
 
 void LogicHandler::update(float delta){
+	
 	if(!titleScreen){
-		cloud1.move(-0.01f * delta, 0.0f);
-		cloud2.setPosition(WIDTH + cloud1.getPosition().x, 0);
+		clouds.update(delta);
 	}
 }
 
@@ -90,6 +97,8 @@ bool LogicHandler::loadTextures(std::string dir){
 	if(file.is_open()){
 		while(file.good()){
 			std::getline(file, line);
+			
+			std::cout << "res: " << line;
 
 			sf::Texture *tex;
 			tex = new sf::Texture;
@@ -98,6 +107,7 @@ bool LogicHandler::loadTextures(std::string dir){
 			}
 			textures.push_back(tex);
 			
+			std::cout << " loaded" << std::endl;
 		}
 		file.close();
 	}else{
