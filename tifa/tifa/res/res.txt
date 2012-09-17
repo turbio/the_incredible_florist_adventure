@@ -3,3 +3,6 @@ title.png
 clouds.png
 green_grass.png
 plr_head_happy.png
+plr_head_evil.png
+plr_body.png
+plr_leg.png

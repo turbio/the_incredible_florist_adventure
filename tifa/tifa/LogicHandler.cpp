@@ -4,7 +4,6 @@
 #define HEIGHT 480
 #define TITLE "The Incredible Florist Adventure"
 
-sf::Sprite titleScreenBg, yamster;
 sf::RectangleShape shape;
 
 InfinitePan clouds, ground;
@@ -26,23 +25,44 @@ LogicHandler::LogicHandler(void){
 	titleScreenBg.setTexture(*textureList.at(1));
 	titleScreenBg.setPosition(0, 0);
 
+	setupSprites();
+
+	window->setFramerateLimit(0);
+}
+
+void LogicHandler::setupSprites(void){
+	//setup panning clouds
 	sf::Sprite *cloudSprite = new sf::Sprite();
 	cloudSprite->setTexture(*textureList.at(2));
 	spriteList.push_back(cloudSprite);
 	spriteList.push_back(clouds.setSprite(cloudSprite, WIDTH, -0.0001f, 0.0f));
 
+	//setup panning ground
 	sf::Sprite *groundSprite = new sf::Sprite();
 	groundSprite->setTexture(*textureList.at(3));
 	spriteList.push_back(groundSprite);
 	spriteList.push_back(ground.setSprite(groundSprite, WIDTH, -0.001f, 350.0f));
 
-	yamster.setTexture(*textureList.at(4));
-	spriteList.push_back(&yamster);
-	yamster.scale(0.25, 0.25);
-	yamster.setOrigin(167, 340);
-	yamster.setPosition(50, 300);
+	//crate player
+	//leg
+	sf::Sprite *playerSprite = new sf::Sprite(*textureList.at(7));
+	playerSprite->scale(0.30, 0.30);
+	playerSprite->setOrigin(25, 0);
+	playerSprite->move(125, 280);
+	spriteList.push_back(player.addSprite(playerSprite));
 
-	window->setFramerateLimit(0);
+	//body
+	playerSprite = new sf::Sprite(*textureList.at(6));
+	playerSprite->scale(0.30, 0.30);
+	playerSprite->move(100, 190);
+	spriteList.push_back(player.addSprite(playerSprite));
+
+	//head
+	playerSprite = new sf::Sprite(*textureList.at(4));
+	playerSprite->scale(0.30, 0.30);
+	playerSprite->setOrigin(167.5, 340);
+	playerSprite->move(100, 200);
+	spriteList.push_back(player.addSprite(playerSprite));
 }
 
 //DESTRUCTOR
@@ -84,11 +104,15 @@ void LogicHandler::run(void){
 }
 
 void LogicHandler::update(double delta){
-	elapsedTime += (delta * 0.0001);
+	elapsedTime += (delta * 0.00001);
+
+	//move joints
+	player.getSprite(0)->setRotation(elapsedTime);
+	player.getSprite(2)->setRotation(elapsedTime);
+
 	if(!titleScreen){
 		clouds.update(delta);
 		ground.update(delta);
-		yamster.setRotation(sin(elapsedTime * 0.15) * 10);
 	}
 }
 
