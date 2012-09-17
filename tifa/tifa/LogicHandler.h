@@ -28,4 +28,5 @@ private:
 	double elapsedTime;	//total time elapsed
 	MultiSprite player;	//player sprite
 	sf::Sprite titleScreenBg;	//title screen background
+	InfinitePan clouds, ground;
 };

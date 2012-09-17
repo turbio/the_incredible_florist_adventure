@@ -6,8 +6,6 @@
 
 sf::RectangleShape shape;
 
-InfinitePan clouds, ground;
-
 //CONSTRUCTOR
 LogicHandler::LogicHandler(void){
 	titleScreen = true;
@@ -37,15 +35,16 @@ void LogicHandler::setupSprites(void){
 	spriteList.push_back(cloudSprite);
 	spriteList.push_back(clouds.setSprite(cloudSprite, WIDTH, -0.0001f, 0.0f));
 
-	//setup panning ground
-	sf::Sprite *groundSprite = new sf::Sprite();
-	groundSprite->setTexture(*textureList.at(3));
-	spriteList.push_back(groundSprite);
-	spriteList.push_back(ground.setSprite(groundSprite, WIDTH, -0.001f, 350.0f));
-
 	//crate player
 	//leg
 	sf::Sprite *playerSprite = new sf::Sprite(*textureList.at(7));
+	playerSprite->scale(0.30, 0.30);
+	playerSprite->setOrigin(25, 0);
+	playerSprite->move(125, 280);
+	spriteList.push_back(player.addSprite(playerSprite));
+
+	//leg2
+	playerSprite = new sf::Sprite(*textureList.at(7));
 	playerSprite->scale(0.30, 0.30);
 	playerSprite->setOrigin(25, 0);
 	playerSprite->move(125, 280);
@@ -63,6 +62,14 @@ void LogicHandler::setupSprites(void){
 	playerSprite->setOrigin(167.5, 340);
 	playerSprite->move(100, 200);
 	spriteList.push_back(player.addSprite(playerSprite));
+
+	player.move(0.1f, 70.0f);
+
+	//setup panning ground
+	sf::Sprite *groundSprite = new sf::Sprite();
+	groundSprite->setTexture(*textureList.at(3));
+	spriteList.push_back(groundSprite);
+	spriteList.push_back(ground.setSprite(groundSprite, WIDTH, -0.001f, 350.0f));
 }
 
 //DESTRUCTOR
@@ -107,8 +114,12 @@ void LogicHandler::update(double delta){
 	elapsedTime += (delta * 0.00001);
 
 	//move joints
-	player.getSprite(0)->setRotation(elapsedTime);
-	player.getSprite(2)->setRotation(elapsedTime);
+	player.getSprite(0)->setRotation(sin(elapsedTime * 1.5) * 60);
+	player.getSprite(1)->setRotation(sin(elapsedTime * -1.5) * 60);
+	player.getSprite(3)->setRotation(sin(elapsedTime * 1) * 10);
+
+	player.bob(5.0f, -5.0f, 0.0001f * delta);
+	
 
 	if(!titleScreen){
 		clouds.update(delta);
